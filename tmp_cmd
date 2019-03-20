@@ -1,0 +1,7 @@
+python learner.py --port 9999
+
+python actor.py --lrn_addr localhost:9999 --task_index 0
+
+python actor.py --lrn_addr localhost:9999 --task_index 1
+
+python actor.py --lrn_addr localhost:9999 --task_index 55

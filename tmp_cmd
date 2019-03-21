@@ -9,3 +9,4 @@ python actor.py --lrn_addr localhost:9999 --task_index 55
 
 # k8s
 python render_template.py tzmq.template.jinja | kubectl create -f -
+python render_template.py tzmq.template.jinja | kubectl delete -f -

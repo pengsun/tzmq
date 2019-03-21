@@ -53,8 +53,9 @@ spec:
         task: "{{ i }}"
     spec:
       containers:
-      - name: tzmq_xing_me
+      - name: tzmq-xing-me
         image: {{ image }}
+        imagePullPolicy: Never
 {% if credential_secret_name != "" %}
         env:
         - name: GOOGLE_APPLICATION_CREDENTIALS

@@ -6,6 +6,7 @@ RUN pip install pip --upgrade
 
 # Python deps
 RUN pip --no-cache-dir install pyzmq
+RUN pip --no-cache-dir install absl-py
 
 # This
 ENV WORK_DIR /root/work

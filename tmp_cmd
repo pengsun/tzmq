@@ -1,3 +1,4 @@
+# bare metal
 python learner.py --port 9999
 
 python actor.py --lrn_addr localhost:9999 --task_index 0
@@ -5,3 +6,6 @@ python actor.py --lrn_addr localhost:9999 --task_index 0
 python actor.py --lrn_addr localhost:9999 --task_index 1
 
 python actor.py --lrn_addr localhost:9999 --task_index 55
+
+# k8s
+python render_template.py tzmq.template.jinja | kubectl create -f -

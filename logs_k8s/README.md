@@ -29,4 +29,4 @@ Now, you can view the collected logs through `kibana` in a web browser, where:
 * the port can be found by `kubectl get svc kibana_svc_name` 
 * `Kibana -> Management -> Index name or pattern` should be set to `tzmq` (see the `tzmq.template.jinja` `env` field)
 
-[A snapshot](tzmq_kibana.png)
+![tzmq](tzmq_kibana.png)

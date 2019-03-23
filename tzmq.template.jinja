@@ -1,8 +1,9 @@
 {%- set name = "tle" -%}
 {%- set image = "my_tzmq" -%}
-{%- set actor_replicas = 3 -%}
+{%- set actor_replicas = 4 -%}
 {%- set learner_replicas = 1 -%}
 {%- set script = "" -%}
+{%- set log_stdout = "true" -%}
 {%- set data_dir = "" -%}
 {%- set train_dir = "" -%}
 {%- set credential_secret_name = "" -%}
@@ -60,6 +61,11 @@ spec:
         env:
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: "/etc/credential/{{ credential_secret_key }}"
+{% endif %}
+{% if log_stdout != "" %}
+        env:
+        - name: aliyun_logs_tzmq
+          value: "stdout"
 {% endif %}
         ports:
         - containerPort: {{ port }}

@@ -54,7 +54,7 @@ python render_template.py tzmq.template.jinja | kubectl delete -f -
 Use `kubectl get pods` to show pod names,
 and use `kubectl logs pod_id` to show the log (stdout) of that container.
 
-TODO: describe more elaborated tool (Grafana, etc.)
+Or you can rely on a centralized logging service, see [an example here](logs_k8s/README.md).
 
 ## notes
 ### Related Methods

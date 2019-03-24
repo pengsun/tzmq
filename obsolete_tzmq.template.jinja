@@ -1,4 +1,4 @@
-{%- set name = "tzmq" -%}
+{%- set name = "tle" -%}
 {%- set image = "my_tzmq" -%}
 {%- set actor_replicas = 4 -%}
 {%- set learner_replicas = 1 -%}
@@ -12,10 +12,22 @@
 {%- set port = 5000 -%}
 {%- set replicas = {"actor": actor_replicas, "learner": learner_replicas} -%}
 
+{%- macro actor_hosts() -%}
+  {%- for i in range(actor_replicas) -%}
+    {%- if not loop.first -%},{%- endif -%}
+    {{ name }}-actor-{{ i }}:{{ port }}
+  {%- endfor -%}
+{%- endmacro -%}
+
+{%- macro learner_hosts() -%}
+  {%- for i in range(learner_replicas) -%}
+    {%- if not loop.first -%},{%- endif -%}
+    {{ name }}-learner-{{ i }}:{{ port }}
+  {%- endfor -%}
+{%- endmacro -%}
 
 {%- for job in ["actor", "learner"] -%}
 {%- for i in range(replicas[job]) -%}
-{% if job == "learner" %}
 kind: Service
 apiVersion: v1
 metadata:
@@ -28,7 +40,6 @@ spec:
   ports:
   - port: {{ port }}
 ---
-{% endif %}
 kind: ReplicaSet
 apiVersion: extensions/v1beta1
 metadata:
@@ -53,7 +64,7 @@ spec:
 {% endif %}
 {% if log_stdout != "" %}
         env:
-        - name: aliyun_logs_{{ name }}
+        - name: aliyun_logs_tzmq
           value: "stdout"
 {% endif %}
         ports:

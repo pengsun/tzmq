@@ -1,0 +1,105 @@
+{%- set name = "abcv" -%}
+{%- set image = "my_tzmq_v2" -%}
+{%- set actor_replicas = 4 -%}
+{%- set learner_replicas = 1 -%}
+{%- set script = "" -%}
+{%- set log_stdout = "true" -%}
+{%- set data_dir = "" -%}
+{%- set train_dir = "" -%}
+{%- set credential_secret_name = "" -%}
+{%- set credential_secret_key = "" -%}
+
+{%- set port = 5000 -%}
+{%- set replicas = {"actor": actor_replicas, "learner": learner_replicas} -%}
+
+
+{%- for job in ["actor", "learner"] -%}
+{% if job == "learner" %}
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ name }}-{{ job }}
+spec:
+  selector:
+    name: {{ name }}
+    job: {{ job }}
+    task: "{{ i }}"
+  ports:
+  - port: {{ port }}
+---
+{% endif %}
+kind: ReplicaSet
+apiVersion: extensions/v1beta1
+{% if job == "learner" %}
+metadata:
+  name: {{ name }}-{{ job }}
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: {{ name }}
+        job: {{ job }}
+        task: "{{ i }}"
+{% endif %}
+{% if job == "actor" %}
+metadata:
+  name: {{ name }}-actors
+spec:
+  replicas: {{ actor_replicas }}
+  template:
+    metadata:
+      labels:
+        name: {{ name }}
+        job: {{ job }}
+        task: "{{ i }}"
+{% endif %}
+    spec:
+      containers:
+      - name: tzmq-xing-me
+        image: {{ image }}
+        imagePullPolicy: Never
+{% if credential_secret_name != "" %}
+        env:
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: "/etc/credential/{{ credential_secret_key }}"
+{% endif %}
+{% if log_stdout != "" %}
+        env:
+        - name: aliyun_logs_{{ name }}
+          value: "stdout"
+{% endif %}
+        ports:
+        - containerPort: {{ port }}
+{% if job == "tensorboard" %}
+        command:
+        - "tensorboard"
+        args:
+        - "--logdir={{ train_dir }}"
+{% endif %}
+{% if job == "actor" %}
+        command:
+        - "/usr/bin/python"
+        - "actor_v2.py"
+        args:
+        - "--lrn_addr={{ name }}-learner:{{ port }}"
+{% endif %}
+{% if job == "learner" %}
+        command:
+        - "/usr/bin/python"
+        - "learner.py"
+        args:
+        - "--port={{ port }}"
+{% endif %}
+{% if credential_secret_name != "" %}
+        volumeMounts:
+        - name: credential
+          mountPath: /etc/credential
+          readOnly: true
+      volumes:
+      - name: credential
+        secret:
+          secretName: {{ credential_secret_name }}
+{% endif %}
+---
+{%- endfor -%}

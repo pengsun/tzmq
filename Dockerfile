@@ -15,5 +15,5 @@ RUN mkdir -p ${WORK_DIR}
 
 WORKDIR ${WORK_DIR}
 COPY learner.py .
-COPY actor.py .
+COPY actor_v2.py .
 

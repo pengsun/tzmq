@@ -4,7 +4,7 @@
 {%- set learner_replicas = 1 -%}
 {%- set script = "" -%}
 {%- set log_stdout = "true" -%}
-{%- set data_dir = "" -%}
+{%- set save_dir = "/root/work/data" -%}
 {%- set train_dir = "" -%}
 {%- set credential_secret_name = "" -%}
 {%- set credential_secret_key = "" -%}
@@ -55,41 +55,44 @@ spec:
         task: "{{ i }}"
 {% endif %}
     spec:
+{% if job == "learner" %}
+      volumes:
+      - name: learner-work-dir
+        persistentVolumeClaim:
+          claimName: pvc-work
+{% endif %}
       containers:
       - name: tzmq-xing-me
         image: {{ image }}
         imagePullPolicy: Never
-{% if credential_secret_name != "" %}
         env:
+{% if credential_secret_name != "" %}
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: "/etc/credential/{{ credential_secret_key }}"
 {% endif %}
 {% if log_stdout != "" %}
-        env:
         - name: aliyun_logs_{{ name }}
           value: "stdout"
 {% endif %}
         ports:
         - containerPort: {{ port }}
-{% if job == "tensorboard" %}
-        command:
-        - "tensorboard"
-        args:
-        - "--logdir={{ train_dir }}"
-{% endif %}
-{% if job == "actor" %}
         command:
         - "/usr/bin/python"
+{% if job == "learner" %}
+        - "learner_v2.py"
+        args:
+        - "--port={{ port }}"
+        - "--save_dir={{ save_dir }}"
+{% endif %}
+{% if job == "actor" %}
         - "actor_v2.py"
         args:
         - "--lrn_addr={{ name }}-learner:{{ port }}"
 {% endif %}
 {% if job == "learner" %}
-        command:
-        - "/usr/bin/python"
-        - "learner.py"
-        args:
-        - "--port={{ port }}"
+        volumeMounts:
+          - mountPath: "{{ save_dir }}"
+            name: learner-work-dir
 {% endif %}
 {% if credential_secret_name != "" %}
         volumeMounts:

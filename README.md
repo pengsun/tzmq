@@ -27,7 +27,7 @@ I don't care (want to manage) the ip address or domain name."
 ### docker
 First, pack as docker image:
 ```bash
-docker build --tag my_tzmq:latest .
+docker build --file ./Dockerfile_v2 --tag my_tzmq_v2:latest .
 ```
 which generates an image named `tzmq`. 
 You can verify it by the `docker images` command.
@@ -39,7 +39,7 @@ Or you can redo the `docker build` (should be reasonably fast as many intermedia
 ### k8s start and stop
 Start it with k8s:
 ```bash
-python render_template.py tzmq.template.jinja | kubectl create -f -
+python render_template.py tzmq_v2.yaml.jinja | kubectl create -f -
 ```
 Note: `kubectl create -f` means creating from file,
 the second single dash `-` indicates a special file the `stdin`,
@@ -47,7 +47,7 @@ and finally the pipe operator `|` forwards the output string.
 
 Stop it:
 ```bash
-python render_template.py tzmq.template.jinja | kubectl delete -f -
+python render_template.py tzmq_v2.yaml.jinja | kubectl delete -f -
 ```
 
 ### logs

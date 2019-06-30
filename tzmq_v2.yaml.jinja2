@@ -93,6 +93,7 @@ spec:
         volumeMounts:
           - mountPath: "{{ save_dir }}"
             name: learner-work-dir
+            subPath: "xxx/yyy/zzz"
 {% endif %}
 {% if credential_secret_name != "" %}
         volumeMounts:

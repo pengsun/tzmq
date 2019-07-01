@@ -36,7 +36,7 @@ Use `docker attach` to get in and do any modification,
 and use `docker commit` to save the changes and update the image.
 Or you can redo the `docker build` (should be reasonably fast as many intermediate files are reused internally)
 
-### k8s start and stop
+### k8s start 
 Start it with k8s:
 ```bash
 python render_template.py tzmq_v2.yaml.jinja2 | kubectl create -f -
@@ -45,10 +45,19 @@ Note: `kubectl create -f` means creating from file,
 the second single dash `-` indicates a special file the `stdin`,
 and finally the pipe operator `|` forwards the output string.
 
+```bash
+python render_template.py tzmq_vtke.yaml.jinja2 | kubectl create -f -
+```
+
+### k8s stop
 Stop it:
 ```bash
 python render_template.py tzmq_v2.yaml.jinja2 | kubectl delete -f -
 ```
+```bash
+python render_template.py tzmq_vtke.yaml.jinja2 | kubectl delete -f -
+```
+
 
 ### logs
 Use `kubectl get pods` to show pod names,

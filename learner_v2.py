@@ -13,6 +13,7 @@ FLAGS = flags.FLAGS
 flags.DEFINE_string("port", "10001", "Learner port")
 flags.DEFINE_string("save_dir", ".", "Model saving path")
 flags.DEFINE_integer("save_freq", 12, "Model saving frequency in steps")
+flags.DEFINE_string("save_log_path", "./log.txt", "Log saving path.")
 
 
 def now():
@@ -47,6 +48,11 @@ def main(_):
       print("Learner: saving model to {}".format(p))
       with open(p, "wb") as f:
         f.write(model)
+
+    if step % 6 == 0:
+      with open(FLAGS.save_log_path, "a") as f:
+        f.write(now() + "Leaner writes log message.")
+        f.flush()
 
     step += 1
 

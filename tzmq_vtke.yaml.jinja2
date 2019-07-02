@@ -5,6 +5,7 @@
 {% set learner_replicas = 1 %}
 {% set log_stdout = false %}
 {% set save_dir = "/root/work/data" %}
+{% set save_log_path = "/root/work/data/biglog.txt" %}
 {% set docker_registry_credential = "tke-dockreg-cred" %}
 {% set credential_secret_name = "" %}
 {% set credential_secret_key = "" %}
@@ -80,6 +81,7 @@ spec:
         args:
         - "--port={{ port }}"
         - "--save_dir={{ save_dir }}"
+        - "--save_log_path={{ save_log_path }}"
 {% endif %}
 {% if job == "actor" %}
         - "actor_v2.py"

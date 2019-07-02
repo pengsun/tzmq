@@ -5,10 +5,11 @@
 {% set script = "" %}
 {% set log_stdout = "true" %}
 {% set save_dir = "/root/work/data" %}
+{% set save_log_path = "/root/work/data/biglog.txt" %}
 {% set train_dir = "" %}
 {% set credential_secret_name = "" %}
 {% set credential_secret_key = "" %}
-{% set port = 5000 -%}
+{% set port = 5000 %}
 {% set replicas = {"actor": actor_replicas, "learner": learner_replicas} %}
 
 
@@ -82,6 +83,7 @@ spec:
         args:
         - "--port={{ port }}"
         - "--save_dir={{ save_dir }}"
+        - "--save_log_path={{ save_log_path }}"
 {% endif %}
 {% if job == "actor" %}
         - "actor_v2.py"

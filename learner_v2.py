@@ -51,7 +51,7 @@ def main(_):
 
     if step % 6 == 0:
       with open(FLAGS.save_log_path, "a") as f:
-        f.write(now() + "Leaner writes log message.")
+        f.write(now() + "Leaner writes log message.\n")
         f.flush()
 
     step += 1

@@ -5,6 +5,7 @@
 {% set learner_replicas = 1 %}
 {% set log_stdout = false %}
 {% set save_dir = "/root/work/data" %}
+{% set docker_registry_credential = "tke-dockreg-cred" %}
 {% set credential_secret_name = "" %}
 {% set credential_secret_key = "" %}
 {% set port = 5000 %}
@@ -55,6 +56,8 @@ spec:
         persistentVolumeClaim:
           claimName: {{ pvc_name }}
 {% endif %}
+      imagePullSecrets:
+      - name: {{ docker_registry_credential }}
       containers:
       - name: tzmq-xing-me
         image: {{ image }}

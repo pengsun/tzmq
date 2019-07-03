@@ -63,6 +63,13 @@ spec:
       - name: tzmq-xing-me
         image: {{ image }}
         imagePullPolicy: Always
+        resources:
+          requests:
+            memory: "4000"
+            cpu: "2000m"
+          limits:
+            memory: "4000"
+            cpu: "2000m"
         env:
 {% if credential_secret_name != "" %}
         - name: GOOGLE_APPLICATION_CREDENTIALS

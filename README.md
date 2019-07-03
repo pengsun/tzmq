@@ -27,10 +27,15 @@ I don't care (want to manage) the ip address or domain name."
 ### docker
 First, pack as docker image:
 ```bash
-docker build --file ./Dockerfile_v2 --tag my_tzmq_v2:latest .
+docker build --file ./build_tke/Dockerfile --tag my_tzmq:latest .
 ```
 which generates an image named `tzmq`. 
 You can verify it by the `docker images` command.
+
+Other example:
+```bash
+docker build --file ./build_local/Dockerfile --tag my_tzmq:latest .
+```
 
 Use `docker attach` to get in and do any modification,
 and use `docker commit` to save the changes and update the image.
